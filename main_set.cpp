@@ -1,9 +1,10 @@
-// Feb 14: This file should implement the game using the std::set container class and should compile as a stand-alone file
-// Do not include cards.h in this file
+// Feb 14: This file should implement the game using the std::set container class
+// Do not include card_list.h in this file
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <set>
+#include "card.h"
 
 using namespace std;
 
