@@ -10,7 +10,6 @@ int main(int argc, char** argv) {
         std::cout << "Please provide 2 file names\n";
         return 1;
     }
-
     std::ifstream f1(argv[1]), f2(argv[2]);
     if (f1.fail() || f2.fail()) {
         std::cout << "Could not open file "
@@ -21,8 +20,7 @@ int main(int argc, char** argv) {
 
     std::set<Card> alice, bob;
     std::string line;
-    char sc;
-    std::string vs;
+    char sc; std::string vs;
 
     while (std::getline(f1, line) && !line.empty()) {
         std::istringstream iss(line);
@@ -50,7 +48,7 @@ int main(int argc, char** argv) {
         bob.erase(c);
 
         auto bit = bob.rend();
-        for (auto it = bob.rbegin(); it != bob.rend(); --it) {
+        for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
             if (alice.count(*it)) { bit = it; break; }
         }
         if (bit == bob.rend()) break;
@@ -72,3 +70,5 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+
