@@ -3,53 +3,49 @@
 #include <fstream>
 #include <set>
 #include <sstream>
-#include <vector>
 #include <string>
 
 int main(int argc, char** argv) {
-    std::vector<Card> v1, v2;
+    std::set<Card> alice, bob;
+    char sc;
+    std::string vs;
+
     if (argc >= 3) {
         std::ifstream f1(argv[1]), f2(argv[2]);
         if (f1.fail() || f2.fail()) {
-            std::cout << "Could not open file " << (f1.fail() ? argv[1] : argv[2]) << "\n";
+            std::cout << "Could not open file " 
+                      << (f1.fail() ? argv[1] : argv[2]) 
+                      << "\n";
             return 1;
         }
-        std::string line;
-        while (std::getline(f1, line) && !line.empty()) {
-            std::istringstream iss(line);
-            char sc; std::string vs;
-            iss >> sc >> vs;
-            v1.push_back(Card::fromChars(sc, vs));
+        while (f1 >> sc >> vs) {
+            alice.insert(Card::fromChars(sc, vs));
         }
-        while (std::getline(f2, line) && !line.empty()) {
-            std::istringstream iss(line);
-            char sc; std::string vs;
-            iss >> sc >> vs;
-            v2.push_back(Card::fromChars(sc, vs));
+        while (f2 >> sc >> vs) {
+            bob.insert(Card::fromChars(sc, vs));
         }
     } else {
-        std::string line;
         bool second = false;
+        std::string line;
         while (std::getline(std::cin, line)) {
             if (line.empty()) {
                 second = true;
                 continue;
             }
             std::istringstream iss(line);
-            char sc; std::string vs;
             iss >> sc >> vs;
-            if (!second) v1.push_back(Card::fromChars(sc, vs));
-            else         v2.push_back(Card::fromChars(sc, vs));
+            if (!second)       alice.insert(Card::fromChars(sc, vs));
+            else               bob.insert(Card::fromChars(sc, vs));
         }
     }
-
-    std::set<Card> alice(v1.begin(), v1.end());
-    std::set<Card> bob  (v2.begin(), v2.end());
 
     while (true) {
         auto ait = alice.end();
         for (auto it = alice.begin(); it != alice.end(); ++it) {
-            if (bob.count(*it)) { ait = it; break; }
+            if (bob.count(*it)) {
+                ait = it;
+                break;
+            }
         }
         if (ait == alice.end()) break;
         Card c = *ait;
@@ -59,7 +55,10 @@ int main(int argc, char** argv) {
 
         auto bit = bob.rend();
         for (auto it = bob.rbegin(); it != bob.rend(); --it) {
-            if (alice.count(*it)) { bit = it; break; }
+            if (alice.count(*it)) {
+                bit = it;
+                break;
+            }
         }
         if (bit == bob.rend()) break;
         c = *bit;
@@ -72,9 +71,11 @@ int main(int argc, char** argv) {
     for (auto& c : alice) {
         std::cout << c.toString() << "\n";
     }
+
     std::cout << "\nBob's cards:\n";
     for (auto& c : bob) {
         std::cout << c.toString() << "\n";
     }
+
     return 0;
 }
