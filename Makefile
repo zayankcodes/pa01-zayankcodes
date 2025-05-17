@@ -9,7 +9,7 @@ card.o: card.cpp card.h
 card_list.o: card_list.cpp card_list.h card.h
 	$(CXX) $(CXXFLAGS) -c card_list.cpp
 
-main_set.o: main_set.cpp card_list.h card.h
+main_set.o: main_set.cpp card.h
 	$(CXX) $(CXXFLAGS) -c main_set.cpp
 
 main.o: main.cpp card_list.h card.h
