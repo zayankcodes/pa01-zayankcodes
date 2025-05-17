@@ -1,40 +1,23 @@
-// Feb 14: This file should implement the game using a custom implementation of a BST (that is based on your implementation from lab02)
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <sstream>
 #include "card.h"
 #include "card_list.h"
-//Do not include set in this file
 
-using namespace std;
-
-int main(int argv, char** argc){
-  if(argv < 3){
-    cout << "Please provide 2 file names" << endl;
-    return 1;
-  }
-  
-  ifstream cardFile1 (argc[1]);
-  ifstream cardFile2 (argc[2]);
-  string line;
-
-  if (cardFile1.fail() || cardFile2.fail() ){
-    cout << "Could not open file " << argc[2];
-    return 1;
-  }
-
-  //Read each file
-  while (getline (cardFile1, line) && (line.length() > 0)){
-
-  }
-  cardFile1.close();
-
-
-  while (getline (cardFile2, line) && (line.length() > 0)){
-
-  }
-  cardFile2.close();
-  
-  
-  return 0;
+int main(int argc,char** argv){
+    if(argc<3){ std::cout<<"Please provide 2 file names\n"; return 1; }
+    std::ifstream f1(argv[1]),f2(argv[2]);
+    if(f1.fail()||f2.fail()){ std::cout<<"Could not open file "<<(f1.fail()?argv[1]:argv[2])<<"\n"; return 1; }
+    bst alice,bob;
+    std::string line;
+    while(std::getline(f1,line)&&!line.empty()){
+        std::istringstream iss(line); char sc; std::string vs; iss>>sc>>vs;
+        alice.insert(Card::fromChars(sc,vs));
+    }
+    while(std::getline(f2,line)&&!line.empty()){
+        std::istringstream iss(line); char sc; std::string vs; iss>>sc>>vs;
+        bob.insert(Card::fromChars(sc,vs));
+    }
+    playGame(alice,bob);
+    return 0;
 }

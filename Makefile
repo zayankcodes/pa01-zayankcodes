@@ -1,32 +1,31 @@
-CXX=g++ 
-CXXFLAGS = -g --std=c++20 -Wall
+CXX = g++
+CXXFLAGS = -std=c++20 -Wall -g
 
-all: game game_set
-
-game_set: card.o main_set.o
-	${CXX} ${CXXFLAGS} card.o main_set.o -o game_set
-
-game: card_list.o main.o
-	${CXX} ${CXXFLAGS} card_list.o main.o -o game
-
-tests: card.o card_list.o tests.o
-	${CXX} ${CXXFLAGS} card.o card_list.o tests.o -o tests
-	./tests
-
-main_set.o: main_set.cpp
-	${CXX} ${CXXFLAGS} main_set.cpp -c
-
-main.o: main.cpp
-	${CXX} ${CXXFLAGS} main.cpp -c
-
-tests.o: tests.cpp
-	${CXX} ${CXXFLAGS} tests.cpp -c
-
-card_list.o: card_list.cpp card_list.h
-	${CXX} ${CXXFLAGS} card_list.cpp -c
+all: game_set game tests
 
 card.o: card.cpp card.h
-	${CXX} ${CXXFLAGS} card.cpp -c
+	$(CXX) $(CXXFLAGS) -c card.cpp
+
+card_list.o: card_list.cpp card_list.h card.h
+	$(CXX) $(CXXFLAGS) -c card_list.cpp
+
+main_set.o: main_set.cpp card.h
+	$(CXX) $(CXXFLAGS) -c main_set.cpp
+
+main.o: main.cpp card_list.h card.h
+	$(CXX) $(CXXFLAGS) -c main.cpp
+
+tests.o: tests.cpp card_list.h card.h
+	$(CXX) $(CXXFLAGS) -c tests.cpp
+
+game_set: main_set.o card.o
+	$(CXX) $(CXXFLAGS) -o game_set main_set.o card.o
+
+game: main.o card_list.o card.o
+	$(CXX) $(CXXFLAGS) -o game main.o card_list.o card.o
+
+tests: tests.o card_list.o card.o
+	$(CXX) $(CXXFLAGS) -o tests tests.o card_list.o card.o
 
 clean:
-	rm game_set game *.o
+	rm -f *.o game_set game tests
