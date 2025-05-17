@@ -24,8 +24,8 @@ tests.o: tests.cpp card_list.h card.h
 main_set: main_set.o card.o
 	$(CXX) $(CXXFLAGS) -o main_set main_set.o card.o
 
-game_set: game_set.o card.o
-	$(CXX) $(CXXFLAGS) -o game_set game_set.o card.o
+game_set: card.o main_set.o
+	${CXX} ${CXXFLAGS} card.o main_set.o -o game_set
 
 game: main.o card_list.o card.o
 	$(CXX) $(CXXFLAGS) -o game main.o card_list.o card.o
