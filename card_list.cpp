@@ -138,7 +138,7 @@ void playGame(bst& alice, bst& bob) {
         bob.remove(ac);
 
         auto bit = bob.rend();
-        for (auto it = bob.rbegin(); it != bob.rend(); --it) {
+        for (auto it = bob.rbegin(); it != bob.rend(); ++it) {
             if (alice.contains(*it)) { bit = it; break; }
         }
         if (bit == bob.rend()) break;
